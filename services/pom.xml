@@ -30,6 +30,12 @@
             <artifactId>kumuluzee-grpc</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.convertapi.client</groupId>
+            <artifactId>convertapi</artifactId>
+            <version>2.2</version>
+        </dependency>
+
     </dependencies>
 
     <build>

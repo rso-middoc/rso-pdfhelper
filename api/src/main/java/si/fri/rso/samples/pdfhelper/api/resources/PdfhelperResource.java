@@ -13,6 +13,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -28,6 +29,15 @@ public class PdfhelperResource {
 
     @GET
     public Response process(PdfhelperRequest request) {
+
+        String test;
+
+        try {
+            pdfhelperBean.processPdfRequest();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
 
         JsonObject json = Json.createObjectBuilder()
                 .add("Status", "200")
