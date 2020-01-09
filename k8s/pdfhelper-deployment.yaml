@@ -13,24 +13,26 @@ spec:
         app: pdfhelper
     spec:
       containers:
-      - item: jmezna/rso-pdfhelper:1.0.0-SNAPSHOT-17.1
+      - item: iramovs/rso-pdfhelper:1.0.0-SNAPSHOT-17.1
         name: pdfhelper
+        env:
+          - name: KUMULUZEE_DISCOVERY_CLUSTER
+            value: cluster-1
+          - name: KUMULUZEE_DISCOVERY_ETCD_HOSTS
+            value: http://10.11.245.103:2379
+          - name: KUMULUZEE_DISCOVERY_ETCD_USERNAME
+            value: root
+          - name: KUMULUZEE_DISCOVERY_ETCD_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: etcd-pass
+                key: ETCD_PASSWORD
+          - name: KUMULUZEE_SERVER_BASEURL
+            value: http://104.198.64.160:8080
         ports:
         - containerPort: 8082
           name: server
           protocol: TCP
-        livenessProbe:
-          httpGet:
-            path: /health/live
-            port: server
-          initialDelaySeconds: 20
-          periodSeconds: 3
-        readinessProbe:
-          httpGet:
-            path: /health/ready
-            port: server
-          initialDelaySeconds: 20
-          periodSeconds: 3
 
 
 ---
@@ -40,7 +42,7 @@ kind: Service
 metadata:
   name: pdfhelper
 spec:
-  type: ClusterIP
+  type: LoadBalancer
   ports:
     - port: 8082
       protocol: TCP

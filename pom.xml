@@ -24,6 +24,7 @@
         <kumuluzee-health.version>2.1.0</kumuluzee-health.version>
         <kumuluzee-streaming.version>1.2.0</kumuluzee-streaming.version>
         <kumuluz-grpc.version>1.1.0</kumuluz-grpc.version>
+        <kumuluzee-discovery.version>1.1.1</kumuluzee-discovery.version>
     </properties>
 
     <dependencyManagement>
@@ -65,6 +66,11 @@
                 <groupId>si.fri.rso.samples</groupId>
                 <artifactId>pdfhelper-api</artifactId>
                 <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.kumuluz.ee.discovery</groupId>
+                <artifactId>kumuluzee-discovery-etcd</artifactId>
+                <version>${kumuluzee-discovery.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
