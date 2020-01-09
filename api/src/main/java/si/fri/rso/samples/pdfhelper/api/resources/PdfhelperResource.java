@@ -3,6 +3,7 @@ package si.fri.rso.samples.pdfhelper.api.resources;
 import si.fri.rso.samples.pdfhelper.api.dtos.PdfhelperRequest;
 import si.fri.rso.samples.pdfhelper.services.beans.PdfhelperBean;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.json.Json;
 import javax.json.JsonObject;
@@ -18,22 +19,25 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 @Path("process")
+@ApplicationScoped
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class PdfhelperResource {
 
+    @Inject
     private PdfhelperBean pdfhelperBean;
 
     @Context
     protected UriInfo uriInfo;
 
-    @GET
+    @POST
     public Response process(PdfhelperRequest request) {
 
-        String test;
+        String pdfUrl = request.getItemLocation();
+        String compressedUrl = "";
 
         try {
-            pdfhelperBean.processPdfRequest();
+            compressedUrl = pdfhelperBean.processPdfConverter(pdfUrl);
         } catch (Exception e) {
             e.printStackTrace();
             return Response.status(Response.Status.BAD_REQUEST).build();
@@ -41,6 +45,7 @@ public class PdfhelperResource {
 
         JsonObject json = Json.createObjectBuilder()
                 .add("Status", "200")
+                .add("Compressed pdf link", compressedUrl)
                 .build();
 
         return Response.status(Response.Status.OK).entity(json.toString()).build();

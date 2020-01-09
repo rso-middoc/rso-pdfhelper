@@ -14,6 +14,7 @@ import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -32,33 +33,53 @@ public class PdfhelperBean {
 
     private Client httpClient;
 
+
     @PostConstruct
     private void init() {
         httpClient = ClientBuilder.newClient();
     }
 
-    public String processPdfConverter() throws ExecutionException, InterruptedException {
+    public String processPdfConverter(String pdfUrl) throws ExecutionException, InterruptedException {
 
         Config.setDefaultSecret("LxOTKOTXlmtETdxK");
-        List<String> urls = ConvertApi.convert("pdf", "txt",
-                new Param("File", "http://www.africau.edu/images/default/sample.pdf")
+        List<String> urls = ConvertApi.convert("pdf", "compress",
+                new Param("File", pdfUrl)
         ).get().urls();
 
-        return urls.toString();
+        return urls.get(0);
 
+    }
+
+    public String test() {
+        return "ok";
     }
 
     public void processPdfRequest() {
 
         try {
-            JsonObject parameters = Json.createObjectBuilder()
+            /*JsonObject parameters = Json.createObjectBuilder()
                     .add("Status", "200")
                     .build();
-
+*/
+            String parameters = "{\n" +
+                    "    \"Parameters\": [\n" +
+                    "        {\n" +
+                    "            \"Name\": \"File\",\n" +
+                    "            \"FileValue\": {\n" +
+                    "                \"Url\": \"http://www.africau.edu/images/default/sample.pdf\"\n" +
+                    "            }\n" +
+                    "        },\n" +
+                    "        {\n" +
+                    "            \"Name\": \"StoreFile\",\n" +
+                    "            \"Value\": true\n" +
+                    "        }\n" +
+                    "    ]\n" +
+                    "}";
             Response res = httpClient
                     .target("https://v2.convertapi.com/convert/pdf/to/txt?Secret=LxOTKOTXlmtETdxK")
                     .request(MediaType.APPLICATION_JSON)
                     .post(Entity.entity(parameters, MediaType.APPLICATION_JSON));
+            log.info(res.getEntity().toString());
         } catch (WebApplicationException | ProcessingException e) {
             log.severe(e.getMessage());
             throw new InternalServerErrorException(e);
