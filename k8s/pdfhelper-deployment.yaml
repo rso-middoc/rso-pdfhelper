@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pdfhelper-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pdfhelper
+  template:
+    metadata:
+      labels:
+        app: pdfhelper
+    spec:
+      containers:
+      - item: jmezna/rso-pdfhelper:1.0.0-SNAPSHOT-17.1
+        name: pdfhelper
+        ports:
+        - containerPort: 8082
+          name: server
+          protocol: TCP
+        livenessProbe:
+          httpGet:
+            path: /health/live
+            port: server
+          initialDelaySeconds: 20
+          periodSeconds: 3
+        readinessProbe:
+          httpGet:
+            path: /health/ready
+            port: server
+          initialDelaySeconds: 20
+          periodSeconds: 3
+
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: pdfhelper
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8082
+      protocol: TCP
+      targetPort: server
+  selector:
+    app: pdfhelper

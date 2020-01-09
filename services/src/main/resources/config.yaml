@@ -1,0 +1,27 @@
+kumuluzee:
+  name: pdfhelper-service
+  env:
+    name: dev
+  version: 1.0.0
+  server:
+    base-url: http://localhost:8082
+    http:
+      port: 8082
+  streaming:
+    kafka:
+      consumer:
+        bootstrap-servers: ark-01.srvs.cloudkafka.com:9094
+        group-id: group1
+        enable-auto-commit: true
+        auto-commit-interval-ms: 1000
+        auto-offset-reset: earliest
+        key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+        value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+        security-protocol: SASL_SSL
+        sasl-mechanism: SCRAM-SHA-256
+        sasl-jaas-config: 'org.apache.kafka.common.security.scram.ScramLoginModule required username="2osynm29" password="CZp-M8kuLTMTKKlvALYcgYtFQ7eKKlDm";'
+  grpc:
+    clients:
+      - name: client1
+        port: 8081
+        address: localhost
