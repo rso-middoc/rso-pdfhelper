@@ -61,6 +61,11 @@
                 <artifactId>pdfhelper-services</artifactId>
                 <version>${project.version}</version>
             </dependency>
+            <dependency>
+                <groupId>si.fri.rso.samples</groupId>
+                <artifactId>pdfhelper-api</artifactId>
+                <version>${project.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 

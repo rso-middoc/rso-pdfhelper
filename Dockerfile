@@ -4,8 +4,8 @@ RUN mkdir /app
 
 WORKDIR /app
 
-ADD ./api/target/comments-api-1.0.0-SNAPSHOT.jar /app
+ADD ./api/target/pdfhelper-api-1.0.0-SNAPSHOT.jar /app
 
 EXPOSE 8082
 
-CMD ["java", "-jar", "pdfhelper-services-1.0.0-SNAPSHOT.jar"]
+CMD ["java", "-jar", "pdfhelper-api-1.0.0-SNAPSHOT.jar"]
