@@ -13,7 +13,7 @@ spec:
         app: pdfhelper
     spec:
       containers:
-      - item: iramovs/rso-pdfhelper:1.0.0-SNAPSHOT-17.1
+      - image: iramovs/rso-pdfhelper:1.0.0-SNAPSHOT-17.1
         name: pdfhelper
         env:
           - name: KUMULUZEE_DISCOVERY_CLUSTER

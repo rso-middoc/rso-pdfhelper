@@ -23,6 +23,7 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import com.convertapi.client.Config;
+import com.convertapi.client.ConversionResult;
 import com.convertapi.client.ConvertApi;
 import com.convertapi.client.Param;
 
@@ -39,19 +40,15 @@ public class PdfhelperBean {
         httpClient = ClientBuilder.newClient();
     }
 
-    public String processPdfConverter(String pdfUrl) throws ExecutionException, InterruptedException {
+    public ConversionResult processPdfConverter(String pdfUrl) throws ExecutionException, InterruptedException {
 
         Config.setDefaultSecret("LxOTKOTXlmtETdxK");
-        List<String> urls = ConvertApi.convert("pdf", "compress",
+        ConversionResult conversionResult = ConvertApi.convert("pdf", "compress",
                 new Param("File", pdfUrl)
-        ).get().urls();
+        ).get();
 
-        return urls.get(0);
+        return conversionResult;
 
-    }
-
-    public String test() {
-        return "ok";
     }
 
     public void processPdfRequest() {
@@ -61,20 +58,7 @@ public class PdfhelperBean {
                     .add("Status", "200")
                     .build();
 */
-            String parameters = "{\n" +
-                    "    \"Parameters\": [\n" +
-                    "        {\n" +
-                    "            \"Name\": \"File\",\n" +
-                    "            \"FileValue\": {\n" +
-                    "                \"Url\": \"http://www.africau.edu/images/default/sample.pdf\"\n" +
-                    "            }\n" +
-                    "        },\n" +
-                    "        {\n" +
-                    "            \"Name\": \"StoreFile\",\n" +
-                    "            \"Value\": true\n" +
-                    "        }\n" +
-                    "    ]\n" +
-                    "}";
+            String parameters = "";
             Response res = httpClient
                     .target("https://v2.convertapi.com/convert/pdf/to/txt?Secret=LxOTKOTXlmtETdxK")
                     .request(MediaType.APPLICATION_JSON)

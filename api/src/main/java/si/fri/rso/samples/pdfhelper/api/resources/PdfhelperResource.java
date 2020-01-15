@@ -1,6 +1,9 @@
 package si.fri.rso.samples.pdfhelper.api.resources;
 
+import com.convertapi.client.ConversionResult;
+import com.convertapi.client.ConvertApi;
 import si.fri.rso.samples.pdfhelper.api.dtos.PdfhelperRequest;
+import si.fri.rso.samples.pdfhelper.api.dtos.PdfhelperResponse;
 import si.fri.rso.samples.pdfhelper.services.beans.PdfhelperBean;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -34,21 +37,19 @@ public class PdfhelperResource {
     public Response process(PdfhelperRequest request) {
 
         String pdfUrl = request.getItemLocation();
-        String compressedUrl = "";
+        PdfhelperResponse pdfhelperResponse = new PdfhelperResponse();
 
         try {
-            compressedUrl = pdfhelperBean.processPdfConverter(pdfUrl);
+            ConversionResult conversionResult = pdfhelperBean.processPdfConverter(pdfUrl);
+            pdfhelperResponse.setCompressedLocation(conversionResult.urls().get(0));
+            pdfhelperResponse.setItemId(request.getItemId());
+            pdfhelperResponse.setCredit(ConvertApi.getUser().SecondsLeft);
         } catch (Exception e) {
             e.printStackTrace();
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
 
-        JsonObject json = Json.createObjectBuilder()
-                .add("Status", "200")
-                .add("Compressed pdf link", compressedUrl)
-                .build();
-
-        return Response.status(Response.Status.OK).entity(json.toString()).build();
+        return Response.status(Response.Status.OK).entity(pdfhelperResponse).build();
     }
 
 }
